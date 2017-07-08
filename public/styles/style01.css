@@ -1,0 +1,41 @@
+body {
+    background: lightblue;
+    font-family: Calibri, 'Gill Sans', 'Gill Sans MT', 'Trebuchet MS', sans-serif;
+}
+
+#userContainer {
+    display: flex;
+    flex-flow: row wrap;
+}
+
+.user {
+    height: 128px;
+    width: 128px;
+    padding: 8px;
+    margin: 16px;
+    background: darkslategray;
+    border-radius: 8px;
+    color: white;
+    text-align: center;
+    font-weight: bold;
+    font-size: 2rem;
+}
+
+.user:hover {
+    cursor: pointer;
+    background: darkslateblue;
+}
+
+form#newUser {
+    height: 128px;
+    padding: 8px;
+    margin: 16px;
+}
+
+#logForm {
+    margin: auto auto;
+    min-width: 400px;
+    min-height: 300px;
+    font-size: 3rem;
+    padding: 32px;
+}
