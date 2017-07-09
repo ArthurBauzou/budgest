@@ -1,5 +1,6 @@
 let subForm = document.getElementById("subForm")
-let loginBtn = document.querySelectorAll('.user')
+let loginBtn = document.querySelectorAll('.logBlock')
+let subBtn = document.querySelector('.subBlock')
 let logForm = document.querySelector("#logForm form")
 
 subForm.addEventListener('submit', function(e) {
@@ -17,6 +18,9 @@ subForm.addEventListener('submit', function(e) {
     if (subName.value === '') {
         console.log ('veuillez entrer un nom')
     }
+    if (/\s/.test(subName.value)) {
+        console.log ('votre nom ne doit pas contenir d\'espace')
+    }
     if (subPass.value === '') {
         console.log ('veuillez entrer un password')
     }
@@ -27,6 +31,7 @@ subForm.addEventListener('submit', function(e) {
     if (
         !names.includes(subName.value) &&
         subName.value !== '' &&
+        !/\s/.test(subName.value) &&
         subPass.value !== '' &&
         subPass2.value === subPass.value
     ) {
@@ -44,13 +49,18 @@ subForm.addEventListener('submit', function(e) {
         // })
 
 // ajout d'un bouton de connexion pour chaque utilisateur
-for (let i=0; i<loginBtn.length; i++) {
-    loginBtn[i].addEventListener('click', function(e) {
-        let user = e.target.textContent.replace(/\s/g,'')
-        let passForm = document.getElementById("logForm")
-        q_modal("logForm")
-        passForm.querySelector("h2").textContent = user
-        passForm.querySelector("input").value = user
-        passForm.querySelector("form").setAttribute("action", "/profil/"+user)
-    })
-}
+// for (let i=0; i<loginBtn.length; i++) {
+//     loginBtn[i].addEventListener('click', function(e) {
+//         let user = e.target.textContent.replace(/\s/g,'')
+//         let passForm = document.getElementById("logForm")
+//         q_modal("logForm")
+//         passForm.querySelector("h2").textContent = user
+//         passForm.querySelector("input").value = user
+//         passForm.querySelector("form").setAttribute("action", "/profil/"+user)
+//     })
+// }
+
+subBtn.addEventListener('click', (e) => {
+    // q_modal("block");
+    subForm.style.display= "block"
+})

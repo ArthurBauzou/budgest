@@ -13,6 +13,10 @@ app.get('/', function (req, res) {
     })
 })
 
+app.get('/login', function (req, res) {
+    res.render('login.ejs', {user: req.query.name})
+})
+
 app.post('/subscribe', function (req, res) {
     let msg = req.body
     bdd.newUser(msg.name, msg.pass, 4)
@@ -20,7 +24,7 @@ app.post('/subscribe', function (req, res) {
 })
 
 app.post('/profil/:user', function (req, res) {
-    let login = req.body.login
+    let login = req.params.user
     let password = req.body.password
     bdd.passCheck(login, function(pass) {
         console.log(pass[0].pass)

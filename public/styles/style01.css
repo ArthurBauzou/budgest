@@ -21,6 +21,10 @@ body {
     font-size: 2rem;
 }
 
+.subBlock {
+    background: gray;
+}
+
 .user:hover {
     cursor: pointer;
     background: darkslateblue;
