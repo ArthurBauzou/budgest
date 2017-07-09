@@ -14,7 +14,7 @@ app.get('/', function (req, res) {
 })
 
 app.get('/login', function (req, res) {
-    res.render('login.ejs', {user: req.query.name})
+    res.render('login.ejs', {user: req.query.name, err: req.query.err})
 })
 
 app.post('/subscribe', function (req, res) {
@@ -31,7 +31,8 @@ app.post('/profil/:user', function (req, res) {
         if (password === pass[0].pass) {
             res.render('profil.ejs', {user: login})
         } else {
-            res.render('login.ejs', {user: login})
+            // res.redirect('/login')
+            res.render('login.ejs', {user: login, err: 1})
         }
     })
 })

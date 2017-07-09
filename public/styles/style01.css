@@ -13,9 +13,25 @@ h1 {
     font-size: 48px;
     width: 100%;
     padding: 36px;
+    margin-bottom: 0;    
+}
+
+h1 a {
+    color:black;
+    text-decoration: none;
+}
+
+h2 {
+    margin-top: 0;
+    box-sizing: border-box;
+    background: #CABDAD;
+    font-size: 32px;
+    width: 100%;
+    padding: 16px 36px;
 }
 
 #userContainer {
+    margin-top: 36px;
     margin-bottom: 36px;
     box-sizing: border-box;
     display: flex;
@@ -74,6 +90,10 @@ h1 {
     cursor: pointer;
 }
 
+#logForm {
+    width: 70%;
+    margin: 0 auto;
+}
 
 form#subForm {
     padding: 8px;
@@ -81,10 +101,26 @@ form#subForm {
     flex-flow: column nowrap;
 }
 
-input {
+input{
     width: 100%;
     margin-bottom: 8px;
     margin-top: 4px;
     font-size: 24px;
     padding: 4px;
+    border-radius: 3px;
+    border: 1px solid #B49C7E;
+}
+
+input[type="submit"]{
+    background: #B49C7E;
+    border: none;
+}
+
+.error {
+    background: #D7ACA7;
+    color: #800000;
+    padding: 12px 36px;
+    margin-bottom: 12px;
+    border-radius: 3px;
+    display: inline-block;
 }
