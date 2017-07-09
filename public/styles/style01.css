@@ -1,45 +1,90 @@
 body {
-    background: lightblue;
-    font-family: Calibri, 'Gill Sans', 'Gill Sans MT', 'Trebuchet MS', sans-serif;
+
+    width: 778px;
+    margin: 0 auto;
+    background: #FCF5EB;
+    /*font-family: Calibri, 'Gill Sans', 'Gill Sans MT', 'Trebuchet MS', sans-serif;*/
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+h1 {
+    box-sizing: border-box;
+    background: #E1D3C1;
+    font-size: 48px;
+    width: 100%;
+    padding: 36px;
 }
 
 #userContainer {
+    margin-bottom: 36px;
+    box-sizing: border-box;
     display: flex;
     flex-flow: row wrap;
+    /*justify-content: space-between;*/
+    border: 1px solid #E1D3C1;
+    border-radius: 3px;
+    width: 100%;
+}
+
+#userContainer a {
+    display: flex;
+    flex-flow: column nowrap;
+    /*justify-content: space-around;*/
+    background: #E1D3C1;
+    color: black;
+    text-align: center;
+    font-size: 2rem;
+    margin: 16px;
+    padding-right: 32px;
+    padding-left: 32px;
+    padding-bottom: 12px;
+    text-decoration: none;
+}
+#userContainer a:hover {
+    background: #CABDAD;
 }
 
 .user {
-    height: 128px;
-    width: 128px;
-    padding: 8px;
-    margin: 16px;
-    background: darkslategray;
-    border-radius: 8px;
-    color: white;
-    text-align: center;
-    font-weight: bold;
-    font-size: 2rem;
+    height: 64px;
+    width: 64px;
+    margin: 16px auto;
+    border-radius: 32px;
 }
+.avat1 {background:#154d71}
+.avat2 {background:#0071a2}
+.avat3 {background:#00bcb9}
+.avat4 {background:#fcb826}
+.avat5 {background:#f1872a}
 
+#newContainer {
+    box-sizing: border-box;
+    border: 1px solid #E1D3C1;
+    border-radius: 3px;
+    width: 80%;
+    margin: 0 auto;
+}
 .subBlock {
-    background: gray;
+    text-align: center;
+    background: #E1D3C1;
+    padding: 8px;
+    font-size: 16px;
 }
-
-.user:hover {
+.subBlock:hover {
+    background: #CABDAD;
     cursor: pointer;
-    background: darkslateblue;
 }
 
-form#newUser {
-    height: 128px;
+
+form#subForm {
     padding: 8px;
     margin: 16px;
+    flex-flow: column nowrap;
 }
 
-#logForm {
-    margin: auto auto;
-    min-width: 400px;
-    min-height: 300px;
-    font-size: 3rem;
-    padding: 32px;
+input {
+    width: 100%;
+    margin-bottom: 8px;
+    margin-top: 4px;
+    font-size: 24px;
+    padding: 4px;
 }

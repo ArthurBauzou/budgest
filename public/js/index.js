@@ -62,5 +62,5 @@ subForm.addEventListener('submit', function(e) {
 
 subBtn.addEventListener('click', (e) => {
     // q_modal("block");
-    subForm.style.display= "block"
+    subForm.style.display= "flex"
 })

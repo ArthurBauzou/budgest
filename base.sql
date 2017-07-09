@@ -41,7 +41,10 @@ create table RENTREES (
     foreign key (PERSONNE) REFERENCES PERSONNES(NOM)
 )engine=innodb;
 
-insert into personnes (nom, pass, avatar) values ('arthur', 'saucisse', 8), ('juliette', '1919', 4);
+insert into personnes (nom, pass, avatar) values 
+    ('Arthur', 'saucisse', 1), 
+    ('Juliette', '1919', 3), 
+    ('Marmaduke', 'TheKing', 5);
 
 insert into POSTES (nom) values ('Supermarché'), ('Bar'), ('Restau');
 insert into ORIGINES (nom) values ('RSA'), ('Detournements de fonds');

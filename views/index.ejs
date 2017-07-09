@@ -1,35 +1,30 @@
 <link rel="stylesheet" href="styles/style01.css">
 <script src="js/general.js"></script>
 
-<h1>budgest</h1>
+<h1>Budge$t</h1>
 
 <div id="userContainer">
     <% for (let i=0; i<userlist.length; i++) { %>
         <span class="namelist" hidden><%= userlist[i].nom %></span>
     <% if (i<8) { %>
-        <div class="logBlock user">
-            <a href= <%= "/login?name="+userlist[i].nom %>><%=userlist[i].nom%></a>
-        </div>
+        <a href="/login?name=<%=userlist[i].nom%>">
+            <div class="logBlock user <%='avat'+userlist[i].avatar%>" ></div>
+            <%=userlist[i].nom%>
+        </a>
     <% }} %>
-        <div class="subBlock user">
-            +
-        </div>
 </div>
 
-<div id="logForm" hidden>
-    <h2>sample</h2>
-    <form method="post">
-        <input type="text" name="login" placeholder="login?">
-        <input type="text" name="password" placeholder="password?">
-        <input type="submit" value="go!">
+<div id="newContainer">
+    <div class="subBlock">
+        nouvel utilisateur
+    </div>
+    <form id="subForm" action="/subscribe" method="post" hidden>
+        <input type="text" name="name" id="name" placeholder="nom">
+        <input type="text" name="pass" id="pass" placeholder="password">
+        <input type="text" name="pass2" id="pass2" placeholder="confirmer password">
+        <input type="submit" class="subregist" value="+">
     </form>
 </div>
 
-<form id="subForm" action="/subscribe" method="post" hidden>
-    <input type="text" name="name" id="name" placeholder="nom">
-    <input type="text" name="pass" id="pass" placeholder="password">
-    <input type="text" name="pass2" id="pass2" placeholder="confirmer password">
-    <input type="submit" class="subregist" value="+">
-</form>
 
 <script src="js/index.js" defer></script>
