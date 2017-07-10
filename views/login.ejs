@@ -4,13 +4,13 @@
 
 <h2> <%=user%> </h2>
 
-<% if (err===1) { %>
-<div class="error">
-    Mot de passe érroné
-</div>
-<% } %>
 
 <div id="logForm">
+    <% if (err===1) { %>
+    <div class="error">
+        Mot de passe érroné
+    </div>
+    <% } %>
     <form method="post" action=<%="/profil/"+user %>>
         <input type="text" name="password" placeholder="password?" autofocus>
         <input type="submit" value="connexion">

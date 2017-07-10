@@ -1,4 +1,5 @@
 <link rel="stylesheet" href="/styles/style01.css">
+<link rel="stylesheet" href="/styles/table.css">
 
 
 <h1><a href="/" title="home">Budge$t</a></h1>
@@ -6,17 +7,42 @@
 
 <p>bienvenue sur votre interface de gestion</p>
 
-<button type="button" id="entreeBtn">
-    +
+<div id="btnContainer">
+    <button type="button" id="entreeBtn">
+    + €
     <span>nouvelle rentrée d'argent</span>
-</button>
+    </button>
 
-<button type="button" id="depenseBtn">
-    -
+    <button type="button" id="depenseBtn">
+    - €
     <span>nouvelle dépense</span>    
-</button>
+    </button>
 
-<button type="button" id="depenseBtn">
-    €
-    <span>mes budgets</span>    
-</button>
+    <button type="button" id="depenseBtn">
+    => €
+    <span>nouveau virement</span>    
+    </button>
+</div>
+
+<dvi id="tableau">
+<table>
+    <tr>
+        <th>Transaction</th>
+        <th>Montant</th>
+        <th>Date</th>
+        <th>Poste/Origine</th>
+    </tr>
+    <% deps.forEach(function(dep) { %>
+    <tr>
+        <td><%=dep.intitule%></td>
+        <td><%=dep.montant%></td>
+        <% let date = dep.date %>
+        <% let jour = date.getDate(); let mois = date.getMonth()+1; let annee = date.getFullYear() %>
+        <td><%=jour%>/<%=mois%>/<%=annee%></td>
+        <td><%=dep.poste%></td>
+    </tr>
+    <% }) %>
+</dvi>
+
+<script>console.log(deps)</script>
+

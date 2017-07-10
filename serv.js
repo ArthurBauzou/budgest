@@ -29,7 +29,10 @@ app.post('/profil/:user', function (req, res) {
     bdd.passCheck(login, function(pass) {
         console.log(pass[0].pass)
         if (password === pass[0].pass) {
-            res.render('profil.ejs', {user: login})
+            bdd.userDep(login, function(depenses) {
+                console.log(result)
+                res.render('profil.ejs', {user: login, deps:depenses})
+            })
         } else {
             // res.redirect('/login')
             res.render('login.ejs', {user: login, err: 1})

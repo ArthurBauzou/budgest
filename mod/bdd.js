@@ -3,7 +3,7 @@ let bdd = require('mysql2')
 let connection = bdd.createConnection({
   host: 'localhost',
   user: 'root',
-  password: 'pass', //saucisse
+  password: 'saucisse', //pass
   database: 'budggest'
 });
 
@@ -27,7 +27,12 @@ exports.newUser = function(nom, pass, avat) {
     })
 }
 
-
-// exports.userTransactions = function(fn) {
-//     connection.query('select')
-// }
+exports.userDep = function(user, fn) {
+    connection.query('select id_dep, depenses.nom as intitule, montant, date_dep as date, postes.nom as poste from depenses '+
+        'join postes ON depenses.poste_id = postes.id_post '+
+        'where personne = '+"'"+user+"'; ",
+        function(err, result, fields) {
+        if (err) throw err
+        fn(result)
+    })
+}
