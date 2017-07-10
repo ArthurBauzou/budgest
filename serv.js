@@ -29,15 +29,27 @@ app.post('/profil/:user', function (req, res) {
     bdd.passCheck(login, function(pass) {
         console.log(pass[0].pass)
         if (password === pass[0].pass) {
-            bdd.userDep(login, function(depenses) {
-                console.log(result)
-                res.render('profil.ejs', {user: login, deps:depenses})
+            bdd.userTransaction(login, function(lignes) {
+                res.render('profil.ejs', {user: login, data:lignes})
             })
         } else {
-            // res.redirect('/login')
             res.render('login.ejs', {user: login, err: 1})
         }
     })
+})
+
+app.get('/profil/:user/new', function(req, res) {
+    let type = req.query.type
+    if (type==='rent' || type==='dep') {
+        bdd.post_origin(function(posto) {
+            res.render('new.ejs', {user: req.params.user, type: type, postoList: posto, users: []})
+        })
+    }
+    if (type==='vir') {
+        bdd.userQuery(function(users) {
+            res.render('new.ejs', {user: req.params.user, type: type, users: users, postoList: []})
+        })
+    }
 })
 
 app.use(function (err, req, res, next) {

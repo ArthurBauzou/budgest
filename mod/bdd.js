@@ -27,11 +27,36 @@ exports.newUser = function(nom, pass, avat) {
     })
 }
 
-exports.userDep = function(user, fn) {
-    connection.query('select id_dep, depenses.nom as intitule, montant, date_dep as date, postes.nom as poste from depenses '+
-        'join postes ON depenses.poste_id = postes.id_post '+
-        'where personne = '+"'"+user+"'; ",
-        function(err, result, fields) {
+exports.userTransaction = function(user, fn) {
+    let quer = 
+    'select id_dep, null as id_rent, null as id_vir, depenses.nom as intitule, montant, date_dep as common_date, postes.nom as origpost '+
+    'from depenses '+
+    'join postes ON depenses.poste_id = postes.id_post '+
+    'where personne = '+"'"+user+"' "+
+    'UNION ALL '+
+    'select null as id_dep, id_rent, null as id_vir, rentrees.nom as intitule, montant, date_rent as common_date, origines.nom as origpost '+
+    'from rentrees '+
+    'join origines ON rentrees.origine_id = origines.id_orig '+
+    'where personne = '+"'"+user+"' "+
+    'UNION ALL '+
+    'select null as id_dep, null as id_rent, id_vir, virements.nom as intitule, montant, date_vir as common_date, beneficiaire as origpost '+
+    'from virements '+
+    'where personne= '+"'"+user+"' "+
+    'ORDER BY common_date;'
+
+    connection.query(quer, function(err, result, fields) {
+        if (err) throw err
+        fn(result)
+    })
+}
+
+exports.post_origin = function(fn) {
+    let qu = 
+    'select id_post, null as id_orig, nom from postes '+
+    'union all '+
+    'select null as id_post, id_orig, nom from origines;'
+
+    connection.query(qu, function(err, result, fields) {
         if (err) throw err
         fn(result)
     })

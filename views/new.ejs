@@ -1,0 +1,63 @@
+<link rel="stylesheet" href="/styles/style01.css">
+<link rel="stylesheet" href="/styles/table.css">
+
+<h1><a href="/" title="home">Budge$t</a></h1>
+<h2> <%= user %> </h2>
+
+<form id="newForm" action="" method="post">
+
+    <% if (type==="dep"){ %> <h3>Nouvelle dépense</h3> <%}%>
+    <% if (type==="rent"){ %> <h3>Nouvelle entrée de fonds</h3> <%}%>
+    <% if (type==="vir"){ %> <h3>Nouveau virement</h3> <%}%>
+
+    <label for="descr">
+        <span>description</span>
+        <input id="descr" name="descr" type="text">
+    </label>
+
+    <label for="montant">
+        <span>montant</span>
+        <input id="montant" name="montant" type="text">
+    </label>
+
+    <label for="date">
+        <span>date</span>
+        <input id="date" name="date" type="text" placeholder="yyyy-mm-dd">
+    </label>
+
+    <label for="postorigin">
+        <% if (type==="dep"){ %> <span>Poste de dépense</span> <%}%>
+        <% if (type==="rent"){ %> <span>Origine des revenus</span> <%}%>
+        <% if (type==="vir"){ %> <span>Bénéficiaire</span> <%}%>
+
+        <select id"postorigin" name="posto">
+
+            <% postoList.forEach(function(data) { %>
+                <% if (data.id_post && type==="dep") { %>
+                    <option value="<%=data.id_post%>"> <%=data.nom%> </option>
+                <% } %>
+                <% if (data.id_orig && type==="rent") { %>
+                    <option value="<%=data.id_orig%>"> <%=data.nom%> </option>
+                <% } %>
+            <% }) %>
+
+            <% users.forEach(function(data) { %>
+                <option value="<%=data.nom%>"> <%=data.nom%> </option>
+            <% }) %>
+
+            <% if (type==="dep" || type==="rent") { %>
+                <option value="12384568">Nouveau</option>
+            <%}%>
+
+        </select>
+    </label>
+
+    <label id="newposto" for="n_posto">
+        <span>Nouveau :</span>
+        <input id="n_posto" name="n_posto" type="text">
+    </label>
+
+    <input type="submit" value="Envoyer">
+</form>
+
+<script src="/js/new.js" defer></script>

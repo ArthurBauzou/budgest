@@ -5,26 +5,14 @@
 <h1><a href="/" title="home">Budge$t</a></h1>
 <h2> <%= user %> </h2>
 
-<p>bienvenue sur votre interface de gestion</p>
+<h3>bienvenue sur votre interface de gestion</h3>
 
-<div id="btnContainer">
-    <button type="button" id="entreeBtn">
-    + €
-    <span>nouvelle rentrée d'argent</span>
-    </button>
-
-    <button type="button" id="depenseBtn">
-    - €
-    <span>nouvelle dépense</span>    
-    </button>
-
-    <button type="button" id="depenseBtn">
-    => €
-    <span>nouveau virement</span>    
-    </button>
+<div id="newbtnContainer">
+    <a href="/profil/<%=user%>/new?type=dep"> nouvelle dépense </a>
+    <a href="/profil/<%=user%>/new?type=rent"> nouvelle entrée d'argent </a>
+    <a href="/profil/<%=user%>/new?type=vir"> nouveau virement </a>
 </div>
 
-<dvi id="tableau">
 <table>
     <tr>
         <th>Transaction</th>
@@ -32,17 +20,30 @@
         <th>Date</th>
         <th>Poste/Origine</th>
     </tr>
-    <% deps.forEach(function(dep) { %>
+    <% data.forEach(function(d) { %>
     <tr>
-        <td><%=dep.intitule%></td>
-        <td><%=dep.montant%></td>
-        <% let date = dep.date %>
-        <% let jour = date.getDate(); let mois = date.getMonth()+1; let annee = date.getFullYear() %>
+        <td><%=d.intitule%></td>
+        <td>
+            <% if (d.id_dep) { %>
+                <span style="color:#ce2b37; font-weight:bold">-<%=d.montant%></span>
+            <% } %>
+            <% if (d.id_rent) { %>
+                <span style="color:#009246; font-weight:bold">+<%=d.montant%></span>
+            <% } %>
+            <% if (d.id_vir) { %>
+                <span style="color:#666547; font-weight:bold">-<%=d.montant%></span>
+            <% } %>
+        </td>
+        <%  let date = d.common_date
+            let jour = date.getDate()
+            if (jour<10) {jour = "0"+jour}
+            let mois = date.getMonth()+1
+            if (mois<10) {mois = "0"+mois}
+            let annee = date.getFullYear()
+        %>
         <td><%=jour%>/<%=mois%>/<%=annee%></td>
-        <td><%=dep.poste%></td>
+        <td><%=d.origpost%></td>
     </tr>
     <% }) %>
-</dvi>
-
-<script>console.log(deps)</script>
+</table>
 
