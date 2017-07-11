@@ -4,11 +4,18 @@
 <h1><a href="/" title="home">Budge$t</a></h1>
 <h2> <%= user %> </h2>
 
-<form id="newForm" action="" method="post">
-
-    <% if (type==="dep"){ %> <h3>Nouvelle dépense</h3> <%}%>
-    <% if (type==="rent"){ %> <h3>Nouvelle entrée de fonds</h3> <%}%>
-    <% if (type==="vir"){ %> <h3>Nouveau virement</h3> <%}%>
+<% if (type==="dep"){ %>
+<form id="newForm" action="/profil/<%=user%>/newdep" method="post">
+    <h3>Nouvelle dépense</h3>
+<% } %>
+<% if (type==="rent"){ %>
+<form id="newForm" action="/profil/<%=user%>/newrent" method="post">
+    <h3>Nouvelle entrée de fonds</h3>
+<% } %>
+<% if (type==="vir"){ %>
+<form id="newForm" action="/profil/<%=user%>/newrent" method="post">
+    <h3>Nouveau virement</h3>
+<% } %>
 
     <label for="descr">
         <span>description</span>
@@ -22,7 +29,7 @@
 
     <label for="date">
         <span>date</span>
-        <input id="date" name="date" type="text" placeholder="yyyy-mm-dd">
+        <input id="datemanuel" name="date" type="text" placeholder="yyyy-mm-dd">
     </label>
 
     <label for="postorigin">

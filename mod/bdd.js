@@ -28,7 +28,7 @@ exports.newUser = function(nom, pass, avat) {
 }
 
 exports.userTransaction = function(user, fn) {
-    let quer = 
+    let q = 
     'select id_dep, null as id_rent, null as id_vir, depenses.nom as intitule, montant, date_dep as common_date, postes.nom as origpost '+
     'from depenses '+
     'join postes ON depenses.poste_id = postes.id_post '+
@@ -44,20 +44,28 @@ exports.userTransaction = function(user, fn) {
     'where personne= '+"'"+user+"' "+
     'ORDER BY common_date;'
 
-    connection.query(quer, function(err, result, fields) {
+    connection.query(q, function(err, result, fields) {
         if (err) throw err
         fn(result)
     })
 }
 
 exports.post_origin = function(fn) {
-    let qu = 
+    let q = 
     'select id_post, null as id_orig, nom from postes '+
     'union all '+
     'select null as id_post, id_orig, nom from origines;'
 
-    connection.query(qu, function(err, result, fields) {
+    connection.query(q, function(err, result, fields) {
         if (err) throw err
         fn(result)
     })
+}
+
+exports.addDep = function(nom, montant, date, poste_id, personne) {
+    let q =
+    'insert into depenses (nom, montant, date_dep, poste_id, personne) values '+
+    "('"+nom+"', "+montant+", '"+date+"', "+poste_id+", '"+personne+"');"
+    console.log(q)
+    connection.query(q, function(err, result, fields){ if (err) throw err })
 }

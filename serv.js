@@ -52,6 +52,14 @@ app.get('/profil/:user/new', function(req, res) {
     }
 })
 
+app.post('/profil/:user/newdep', function (req, res) {
+    let msg = req.body
+    let user = req.params.user
+    console.log(msg)
+    bdd.addDep(msg.descr, msg.montant, msg.date, msg.posto, user)
+    // res.render('profil.ejs', {user: user})
+})
+
 app.use(function (err, req, res, next) {
   console.error(err.stack)
   res.status(404).send('welcome to 4O4')
