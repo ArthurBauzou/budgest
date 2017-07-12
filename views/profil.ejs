@@ -3,14 +3,31 @@
 
 
 <h1><a href="/" title="home">Budge$t</a></h1>
-<h2> <%= user %> </h2>
+
+<h2>
+    <%= user %>
+    <% if (data.role[0].role === 0) { %>
+    <div class="total">
+        <p>total : <%=totaux.tot%>€</p>
+        <p>contribution : <%=totaux.totpers%>€</p>
+    </div>
+    <% } %>
+
+    <% if (data.role[0].role === 1) { %>
+    <div class="totalChild">
+        <p>raté</p>
+    </div>
+    <% } %>
+</h2>
 
 <h3>bienvenue sur votre interface de gestion</h3>
 
 <div id="newbtnContainer">
     <a href="/profil/<%=user%>/new?type=dep"> nouvelle dépense </a>
+    <% if (data.role[0].role === 0) { %>
     <a href="/profil/<%=user%>/new?type=rent"> nouvelle entrée d'argent </a>
     <a href="/profil/<%=user%>/new?type=vir"> nouveau virement </a>
+    <% } %>
 </div>
 
 <table>
@@ -25,13 +42,16 @@
         <td><%=d.intitule%></td>
         <td>
             <% if (d.id_dep) { %>
-                <span style="color:#ce2b37; font-weight:bold">-<%=d.montant%></span>
+                <span style="color:#ce2b37; font-weight:bold" class="spent">-<%=d.montant%></span>
             <% } %>
             <% if (d.id_rent) { %>
                 <span style="color:#009246; font-weight:bold">+<%=d.montant%></span>
             <% } %>
-            <% if (d.id_vir) { %>
+            <% if (d.id_vir && data.role[0].role === 0) { %>
                 <span style="color:#666547; font-weight:bold">-<%=d.montant%></span>
+            <% } %>
+            <% if (d.id_vir && data.role[0].role === 1) { %>
+                <span style="color:#009246; font-weight:bold" class="earned">+<%=d.montant%></span>
             <% } %>
         </td>
         <%  let date = d.common_date
@@ -46,4 +66,6 @@
     </tr>
     <% }) %>
 </table>
+<div id="filler"></div>
 
+<script src="/js/profil.js"></script>

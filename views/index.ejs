@@ -8,7 +8,7 @@
         <span class="namelist" hidden><%= userlist[i].nom %></span>
     <% if (i<8) { %>
         <a href="/login?name=<%=userlist[i].nom%>&err=0">
-            <div class="logBlock user <%='avat'+userlist[i].avatar%>" ></div>
+            <div class="logBlock user<%=userlist[i].role%> avat<%=userlist[i].avatar%>"></div>
             <%=userlist[i].nom%>
         </a>
     <% }} %>
@@ -22,6 +22,7 @@
         <input type="text" name="name" id="name" placeholder="nom">
         <input type="password" name="pass" id="pass" placeholder="password">
         <input type="password" name="pass2" id="pass2" placeholder="confirmer password">
+        <span class="childCheck">Ce compte est-il pour un enfant ?<input type="checkbox" name="role"></span>
         <input type="submit" class="subregist" value="+">
     </form>
 </div>

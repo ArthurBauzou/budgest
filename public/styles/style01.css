@@ -3,7 +3,6 @@ body {
     width: 778px;
     margin: 0 auto;
     background: #FCF5EB;
-    /*font-family: Calibri, 'Gill Sans', 'Gill Sans MT', 'Trebuchet MS', sans-serif;*/
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
@@ -22,12 +21,20 @@ h1 a {
 }
 
 h2 {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
     margin-top: 0;
     box-sizing: border-box;
     background: #CABDAD;
     font-size: 32px;
     width: 100%;
     padding: 16px 36px;
+}
+h2 .total p, h2 .totalChild p {
+    font-size: 1.1rem;
+    text-align: right;
+    margin: auto;
 }
 
 h3 {
@@ -41,7 +48,6 @@ h3 {
     box-sizing: border-box;
     display: flex;
     flex-flow: row wrap;
-    /*justify-content: space-between;*/
     border: 1px solid #E1D3C1;
     border-radius: 3px;
     width: 100%;
@@ -50,7 +56,6 @@ h3 {
 #userContainer a {
     display: flex;
     flex-flow: column nowrap;
-    /*justify-content: space-around;*/
     background: #E1D3C1;
     color: black;
     text-align: center;
@@ -65,17 +70,27 @@ h3 {
     background: #CABDAD;
 }
 
-.user {
+.user0 {
     height: 64px;
     width: 64px;
     margin: 16px auto;
     border-radius: 32px;
 }
+
 .avat1 {background:#154d71}
 .avat2 {background:#0071a2}
 .avat3 {background:#00bcb9}
 .avat4 {background:#fcb826}
 .avat5 {background:#f1872a}
+
+.user1 {
+    height: 56px;
+    width: 56px;
+    margin: 16px auto;
+    border-radius: 32px; 
+    border : white solid 4px;
+    background: transparent;
+}
 
 #newContainer {
     box-sizing: border-box;
@@ -106,8 +121,8 @@ form#subForm {
     flex-flow: column nowrap;
 }
 
-input, select{
-    width: 100%;
+input, select, .childCheck {
+    /* width: 100%; */
     margin-bottom: 4px;
     margin-top: 4px;
     font-size: 20px;
@@ -116,10 +131,19 @@ input, select{
     border: 1px solid #B49C7E;
 }
 
+.childCheck input {
+    width: auto;
+    margin-left: 24px;
+}
+
 input[type="submit"]{
     margin-top: 16px;
     background: #B49C7E;
     border: none;
+}
+
+input[type="submit"]:hover {
+    background: #8c775d;
 }
 
 .error {
@@ -166,4 +190,8 @@ label span {
 
 #newbtnContainer a:hover {
     background: #CABDAD;
+}
+
+#filler {
+    height: 150px;
 }

@@ -1,19 +1,23 @@
 <link rel="stylesheet" href="/styles/style01.css">
 <link rel="stylesheet" href="/styles/table.css">
 
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
 <h1><a href="/" title="home">Budge$t</a></h1>
 <h2> <%= user %> </h2>
 
-<% if (type==="dep"){ %>
+<% if (type==="dep") { %>
 <form id="newForm" action="/profil/<%=user%>/newdep" method="post">
     <h3>Nouvelle dépense</h3>
 <% } %>
-<% if (type==="rent"){ %>
+<% if (type==="rent") { %>
 <form id="newForm" action="/profil/<%=user%>/newrent" method="post">
     <h3>Nouvelle entrée de fonds</h3>
 <% } %>
-<% if (type==="vir"){ %>
-<form id="newForm" action="/profil/<%=user%>/newrent" method="post">
+<% if (type==="vir") { %>
+<form id="newForm" action="/profil/<%=user%>/newvir" method="post">
     <h3>Nouveau virement</h3>
 <% } %>
 
@@ -29,7 +33,7 @@
 
     <label for="date">
         <span>date</span>
-        <input id="datemanuel" name="date" type="text" placeholder="yyyy-mm-dd">
+        <input id="datepicker" name="date" type="text">
     </label>
 
     <label for="postorigin">
@@ -37,7 +41,7 @@
         <% if (type==="rent"){ %> <span>Origine des revenus</span> <%}%>
         <% if (type==="vir"){ %> <span>Bénéficiaire</span> <%}%>
 
-        <select id"postorigin" name="posto">
+        <select id="postorigin" name="posto">
 
             <% postoList.forEach(function(data) { %>
                 <% if (data.id_post && type==="dep") { %>
@@ -53,7 +57,7 @@
             <% }) %>
 
             <% if (type==="dep" || type==="rent") { %>
-                <option value="12384568">Nouveau</option>
+                <option value="new">Nouveau</option>
             <%}%>
 
         </select>

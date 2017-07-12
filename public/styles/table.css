@@ -1,8 +1,3 @@
-/*table, th {
-    border: 2px solid #B49C7E;
-    border-collapse: collapse;
-}*/
-
 th{
     height: 36px;
     background: #B49C7E;
@@ -12,8 +7,6 @@ th{
 
 td {
     padding: 4px;
-    /*border-left: 1px solid #B49C7E;*/
-    /*border-right: 1px solid #B49C7E;*/
     border-collapse: collapse;    
 }
 

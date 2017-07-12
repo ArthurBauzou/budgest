@@ -3,25 +3,29 @@ let bdd = require('mysql2')
 let connection = bdd.createConnection({
   host: 'localhost',
   user: 'root',
-  password: 'saucisse', //pass
+  password: 'saucisse', //Ici il faut mettre le mot de passe de sa base de données
   database: 'budggest'
 });
 
+// récupère le password d'un utilisateur
 exports.passCheck = function(name, fn) {
-    connection.query('select pass from personnes where nom = ?', [name], function(err, result, fields) {
-        if (err) throw err
-        fn(result)
-    })
-}
-exports.userQuery = function(fn) {
-    connection.query('select nom, avatar from personnes', function(err, result, fields) {
+    connection.query('select pass from personnes where nom = ?;', [name], function(err, result, fields) {
         if (err) throw err
         fn(result)
     })
 }
 
-exports.newUser = function(nom, pass, avat) {
-    connection.query('insert into personnes (nom, pass, avatar) values ("' +nom+ '", "' +pass+ '", ' +avat+ ')',
+// récupère une liste des utilisateurs inscrits
+exports.userQuery = function(fn) {
+    connection.query('select nom, role, avatar from personnes;', function(err, result, fields) {
+        if (err) throw err
+        fn(result)
+    })
+}
+
+exports.newUser = function(nom, pass, role, avat) {
+    connection.query('insert into personnes (nom, pass, role, avatar) values (?, ?, ?, ?);',
+    [nom, pass, role, avat],
     function(err, result, fields) {
         if (err) throw err
     })
@@ -41,12 +45,23 @@ exports.userTransaction = function(user, fn) {
     'UNION ALL '+
     'select null as id_dep, null as id_rent, id_vir, virements.nom as intitule, montant, date_vir as common_date, beneficiaire as origpost '+
     'from virements '+
-    'where personne= '+"'"+user+"' "+
-    'ORDER BY common_date;'
+    'where personne = '+"'"+user+"' "+
+    'UNION ALL '+
+    'select null as id_dep, null as id_rent, id_vir, virements.nom as intitule, montant, date_vir as common_date, personne as origpost '+
+    'from virements '+
+    'where beneficiaire = '+"'"+user+"' "+
+    'ORDER BY common_date DESC;'
 
     connection.query(q, function(err, result, fields) {
         if (err) throw err
-        fn(result)
+        
+        // on rajoute un element à la table pour savoir si il s'agit d'un adulte ou d'un enfant
+        connection.query('select role from personnes where nom = \''+user+'\';', function(err, result_role, fields) {
+            if (err) throw err
+            result.role = result_role
+            fn(result)
+
+        })
     })
 }
 
@@ -62,10 +77,84 @@ exports.post_origin = function(fn) {
     })
 }
 
-exports.addDep = function(nom, montant, date, poste_id, personne) {
+// exports.addDepense = function(nom, montant, date, poste_id, personne) {
+//     let q =
+//     'insert into depenses (nom, montant, date_dep, poste_id, personne) values '+
+//     "('"+nom+"', "+montant+", '"+date+"', "+poste_id+", '"+personne+"');"
+//     connection.query(q, function(err, result, fields){ if (err) throw err })
+// }
+
+exports.addDepense = function(nom, montant, date, poste_id, personne) {
     let q =
-    'insert into depenses (nom, montant, date_dep, poste_id, personne) values '+
-    "('"+nom+"', "+montant+", '"+date+"', "+poste_id+", '"+personne+"');"
-    console.log(q)
+    'insert into depenses (nom, montant, date_dep, poste_id, personne) values (?, ?, ?, ?, ?);'
+    connection.query(q, [nom, montant, date, poste_id, personne], function(err, result, fields){ if (err) throw err })
+}
+
+exports.addRentree = function(nom, montant, date, origine_id, personne) {
+    let q =
+    'insert into rentrees (nom, montant, date_rent, origine_id, personne) values '+
+    "('"+nom+"', "+montant+", '"+date+"', "+origine_id+", '"+personne+"');"
     connection.query(q, function(err, result, fields){ if (err) throw err })
+}
+
+exports.addVirement = function(nom, montant, date, beneficiaire, personne) {
+    let q =
+    'insert into rentrees (nom, montant, date_vir, beneficiaire, personne) values '+
+    "('"+nom+"', "+montant+", '"+date+"', "+beneficiaire+", '"+personne+"');"
+    connection.query(q, function(err, result, fields){ if (err) throw err })
+}
+
+exports.addPost = function (postName, fn) {
+    connection.query('insert into postes (nom) values (\''+postName+'\');', function(err, result, fields) {
+        if (err) throw err
+        fn(result.insertId)
+    })
+}
+
+exports.addOrig = function (origName, fn) {
+    connection.query('insert into origines (nom) values (\''+origName+'\');', function(err, result, fields) {
+        if (err) throw err
+        fn(result.insertId)
+    })
+}
+
+exports.total = function(user, fn) {
+
+    let q_dep =
+    // "select sum(montant) as total from depenses "+
+    "select sum(dep.montant) as total from depenses dep "+
+    "join personnes pers on pers.nom = dep.personne "+
+    "where pers.role = 0 "+
+    "union "+
+    "select sum(montant) as total from depenses where personne = '"+user+"';"
+    let q_rent =
+    "select sum(montant) as total from rentrees "+
+    "union "+
+    "select sum(montant) as total from rentrees where personne = '"+user+"';"
+    let q_vir =
+    "select sum(montant) as total from virements "+
+    "union "+
+    "select sum(montant) as total from virements where personne = '"+user+"';"
+
+    connection.query(q_rent, function(err, result_rent, fields) {
+        if (err) throw err
+        let total = 0
+        let totalperso = 0
+        if (result_rent[0]) {total = result_rent[0].total}
+        if (result_rent[1]) {totalperso = result_rent[1].total}
+        
+        connection.query(q_dep, function(err, result_dep, fields) {
+            if (err) throw err
+            if (result_dep[0]) {total = Math.round((total - result_dep[0].total)*100)/100}
+            if (result_dep[1]) {totalperso = Math.round((totalperso - result_dep[1].total)*100)/100}
+
+            connection.query(q_vir, function(err, result_vir, fields) {
+                if (err) throw err
+                if (result_vir[0]) {total =  Math.round((total - result_vir[0].total)*100)/100}
+                if (result_vir[1]) {totalperso =  Math.round((totalperso - result_vir[1].total)*100)/100}
+
+                fn({"tot": total, "totpers": totalperso})
+            })         
+        })
+    })
 }
