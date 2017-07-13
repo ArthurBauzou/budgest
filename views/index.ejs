@@ -1,7 +1,9 @@
 <link rel="stylesheet" href="/styles/style01.css">
+<link href="https://fonts.googleapis.com/css?family=Alegreya:700i" rel="stylesheet"> 
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script src="/js/general.js"></script>
 
-<h1><a href="/" title="home">Budge$t</a></h1>
+<h1><a href="/" title="home">Budgest</a></h1>
 
 <div id="userContainer">
     <% for (let i=0; i<userlist.length; i++) { %>
@@ -18,7 +20,9 @@
     <div class="subBlock">
         nouvel utilisateur
     </div>
-    <form id="subForm" action="/subscribe" method="post" hidden>
+    <form id="subForm" action="/subscribe" method="post">
+        <div id="errContainer" class="error"></div>
+
         <input type="text" name="name" id="name" placeholder="nom">
         <input type="password" name="pass" id="pass" placeholder="password">
         <input type="password" name="pass2" id="pass2" placeholder="confirmer password">
@@ -26,5 +30,6 @@
         <input type="submit" class="subregist" value="+">
     </form>
 </div>
+<div id="filler"></div>
 
-<script src="/js/index.js" defer></script>
+<script src="/js/index.js"></script>

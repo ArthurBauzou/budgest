@@ -2,32 +2,46 @@ let subForm = document.getElementById("subForm")
 let loginBtn = document.querySelectorAll('.logBlock')
 let subBtn = document.querySelector('.subBlock')
 let logForm = document.querySelector("#logForm form")
+let errCont = document.getElementById("errContainer")
+
+subForm.style.display = "none"
+errCont.style.display = "none"
 
 subForm.addEventListener('submit', function(e) {
 
     e.preventDefault();
 
-    let names = extraire('.namelist')
+    let names = extraire('.namelist') // la fonction extraire est dans le fichier general.js
 
     let subName = document.getElementById("name")
     let subPass = document.getElementById("pass")
     let subPass2 = document.getElementById("pass2")
+
+    // effacre toutes les erreurs
+    $("#errContainer").empty()
+
+    // ecrire les erreurs si nécessaire
     if (names.includes(subName.value)) {
-        console.log("deja dans la base")
-    }
-    if (subName.value === '') {
-        console.log ('veuillez entrer un nom')
+        errCont.style.display = "block"
+        let err = "ce nom d'utilisateur est déjà dans la base"
+        errCreate(err, errCont)
     }
     if (/\s/.test(subName.value)) {
-        console.log ('votre nom ne doit pas contenir d\'espace')
+        errCont.style.display = "block"
+        let err = "votre nom ne doit pas contenir d\'espace"
+        errCreate(err, errCont)
     }
-    if (subPass.value === '') {
-        console.log ('veuillez entrer un password')
-    }
-    if (subPass2.value !== subPass.value) {
-        console.log ('veuillez confirmer le password')
+    if (subName.value === '' || subPass.value === '') {
+        errCont.style.display = "block"
+        let err = "veuillez remplir tous les champs"
+        errCreate(err, errCont)
+    } else if (subPass2.value !== subPass.value) {
+        errCont.style.display = "block"
+        let err = "veuillez confirmer le password"
+        errCreate(err, errCont)
     }
 
+    // si tout est bon, on peut post
     if (
         !names.includes(subName.value) &&
         subName.value !== '' &&
@@ -48,19 +62,7 @@ subForm.addEventListener('submit', function(e) {
         //     body: JSON.stringify(data)
         // })
 
-// ajout d'un bouton de connexion pour chaque utilisateur
-// for (let i=0; i<loginBtn.length; i++) {
-//     loginBtn[i].addEventListener('click', function(e) {
-//         let user = e.target.textContent.replace(/\s/g,'')
-//         let passForm = document.getElementById("logForm")
-//         q_modal("logForm")
-//         passForm.querySelector("h2").textContent = user
-//         passForm.querySelector("input").value = user
-//         passForm.querySelector("form").setAttribute("action", "/profil/"+user)
-//     })
-// }
 
 subBtn.addEventListener('click', (e) => {
-    // q_modal("block");
     subForm.style.display= "flex"
 })

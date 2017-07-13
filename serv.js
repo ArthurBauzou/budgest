@@ -7,16 +7,19 @@ app.use(express.static('public'))
 app.use(bodyParser.urlencoded({ extended: false })) 
 app.use(bodyParser.json())
 
+// la page d'accueil
 app.get('/', function (req, res) {
     bdd.userQuery(function(users) {
         res.render('index.ejs', {userlist: users})
     })
 })
 
+// page de connexion
 app.get('/login', function (req, res) {
     res.render('login.ejs', {user: req.query.name, err: req.query.err})
 })
 
+// requête d'inscription
 app.post('/subscribe', function (req, res) {
     let msg = req.body
     let role = 0
@@ -26,6 +29,7 @@ app.post('/subscribe', function (req, res) {
     res.redirect('/')
 })
 
+// connexion à la page du profil
 app.post('/profil/:user', function (req, res) {
     let login = req.params.user
     let password = req.body.password
@@ -42,16 +46,17 @@ app.post('/profil/:user', function (req, res) {
     })
 })
 
+// page du formulaire de création de transaction
 app.get('/profil/:user/new', function(req, res) {
     let type = req.query.type
-    if (type==='rent' || type==='dep') {
+    if (type ==='rent' || type ==='dep') {
         bdd.post_origin(function(posto) {
             res.render('new.ejs', {user: req.params.user, type: type, postoList: posto, users: []})
         })
     }
-    if (type==='vir') {
-        bdd.userQuery(function(users) {
-            res.render('new.ejs', {user: req.params.user, type: type, users: users, postoList: []})
+    if (type ==='vir') {
+        bdd.enfantsQuery(function(enfants) {
+            res.render('new.ejs', {user: req.params.user, type: type, users: enfants, postoList: []})
         })
     }
 })
@@ -60,9 +65,8 @@ app.get('/profil/:user/new', function(req, res) {
 app.post('/profil/:user/newdep', function (req, res) {
     let msg = req.body
     let login = req.params.user
-    if (msg.posto = "new") {
+    if (msg.posto === "n_posto") {
         bdd.addPost(msg.n_posto, function(ID) {
-            console.log(ID)
             bdd.addDepense(msg.descr, msg.montant, msg.date, ID, login)
             bdd.userTransaction(login, function(lignes) {
                 bdd.total(login, function(totaux) {
@@ -84,9 +88,8 @@ app.post('/profil/:user/newdep', function (req, res) {
 app.post('/profil/:user/newrent', function (req, res) {
     let msg = req.body
     let login = req.params.user
-    if (msg.posto = "new") {
+    if (msg.posto === "n_posto") {
         bdd.addOrig(msg.n_posto, function(ID) {
-            console.log(ID)
             bdd.addRentree(msg.descr, msg.montant, msg.date, ID, login)
             bdd.userTransaction(login, function(lignes) {
                 bdd.total(login, function(totaux) {
@@ -104,6 +107,37 @@ app.post('/profil/:user/newrent', function (req, res) {
     }
 })
 
+// enregistrer un virement
+app.post('/profil/:user/newvir', function (req, res) {
+    let msg = req.body
+    let login = req.params.user
+    bdd.addVirement(msg.descr, msg.montant, msg.date, msg.posto, login)
+    bdd.userTransaction(login, function(lignes) {
+        bdd.total(login, function(totaux) {
+            res.render('profil.ejs', {user: login, data: lignes, totaux: totaux})
+        })
+    })
+})
+
+// effacer des lignes du tableau
+app.post('/profil/:user/del', function (req, res) {
+    let login = req.params.user
+    console.log(login)
+    let msg = req.body
+    let table = msg.table,
+        idtype = msg.type,
+        id = msg.id
+
+    bdd.delete_x(table, idtype, id)
+    bdd.userTransaction(login, function(lignes) {
+        bdd.total(login, function(totaux) {
+            res.render('profil.ejs', {user: login, data: lignes, totaux: totaux})
+        })
+    })
+})
+
+
+// gerer les erreurs
 app.use(function (err, req, res, next) {
   console.error(err.stack)
   res.status(404).send('welcome to 4O4')
