@@ -87,13 +87,6 @@ exports.userTransaction = function(user, fn) {
         })
     }
 
-// exports.addDepense = function(nom, montant, date, poste_id, personne) {
-//     let q =
-//     'insert into depenses (nom, montant, date_dep, poste_id, personne) values '+
-//     "('"+nom+"', "+montant+", '"+date+"', "+poste_id+", '"+personne+"');"
-//     connection.query(q, function(err, result, fields){ if (err) throw err })
-// }
-
 // fonctions d'ajout de lignes pour les transactions : 
     exports.addDepense = function(nom, montant, date, poste_id, personne) {
         connection.query(
@@ -112,11 +105,6 @@ exports.userTransaction = function(user, fn) {
                 if (err) throw err
             })
     }
-    //     let q =
-    //     'insert into rentrees (nom, montant, date_rent, origine_id, personne) values '+
-    //     "('"+nom+"', "+montant+", '"+date+"', "+origine_id+", '"+personne+"');"
-    //     connection.query(q, function(err, result, fields){ if (err) throw err })
-    // }
 
     exports.addVirement = function(nom, montant, date, beneficiaire, personne) {
         connection.query(
@@ -126,11 +114,6 @@ exports.userTransaction = function(user, fn) {
                 if (err) throw err
             })
     }
-    //     let q =
-    //     'insert into virements (nom, montant, date_vir, beneficiaire, personne) values '+
-    //     "('"+nom+"', "+montant+", '"+date+"', "+benef+", '"+pers+"');"
-    //     connection.query(q, function(err, result, fields){ if (err) throw err })
-    // }
 
 // fonctions d'ajout d'origines des transactions :
     exports.addPost = function (postName, fn) {
@@ -165,12 +148,14 @@ exports.userTransaction = function(user, fn) {
         "select sum(montant) as total from virements where personne = ?;"
 
         connection.query(q_rent, [user], function(err, result_rent, fields) {
+
             if (err) throw err
             let total = 0
             let totalperso = 0
             if (result_rent[0]) {total = result_rent[0].total}
             if (result_rent[1]) {totalperso = result_rent[1].total}
             
+
             console.log("1", total, totalperso)
             connection.query(q_dep, [user], function(err, result_dep, fields) {
                 if (err) throw err
@@ -184,8 +169,6 @@ exports.userTransaction = function(user, fn) {
                     if (result_vir[0]) {total =  Math.round((total - result_vir[0].total)*100)/100}
                     if (result_vir[1]) {totalperso =  Math.round((totalperso - result_vir[1].total)*100)/100}
 
-                    console.log(result_vir)
-                    console.log("3", total, totalperso)
                     fn({"tot": total, "totpers": totalperso})
                 })         
             })
