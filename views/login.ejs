@@ -1,8 +1,19 @@
-<div id="logForm" hidden>
-    <h2>sample</h2>
-    <form method="post">
-        <input type="text" name="login" placeholder="login?" value= <%= user %> >
-        <input type="text" name="password" placeholder="password?">
+<link href="https://fonts.googleapis.com/css?family=Alegreya:700i" rel="stylesheet"> 
+<link rel="stylesheet" href="/styles/style01.css">
+
+<h1><a href="/" title="home">Budgest</a></h1>
+
+<h2> <%=user%> </h2>
+
+
+<div id="logForm">
+    <% if (err===1) { %>
+    <div class="error">
+        Mot de passe érroné
+    </div>
+    <% } %>
+    <form method="post" action=<%="/profil/"+user %>>
+        <input type="password" name="password" placeholder="password?" autofocus>
         <input type="submit" value="connexion">
     </form>
 </div>

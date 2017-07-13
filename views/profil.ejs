@@ -1,21 +1,84 @@
-<link rel="stylesheet" href="styles/style01.css">
-<script src="js/general.js"></script>
+<link href="https://fonts.googleapis.com/css?family=Alegreya:700i" rel="stylesheet"> 
+<link rel="stylesheet" href="/styles/style01.css">
+<link rel="stylesheet" href="/styles/table.css">
+<script src="/js/general.js"></script>
 
-<h1> <%= user %> </h1>
 
-<p>bienvenue sur votre interface de gestion</p>
+<h1><a href="/" title="home">Budgest</a></h1>
 
-<button type="button" id="entreeBtn">
-    +
-    <span>nouvelle rentrée d'argent</span>
-</button>
+<h2>
+    <%= user %>
+    <% if (data.role[0].role === 0) { %>
+    <div class="total">
+        <p>total : <%=totaux.tot%>€</p>
+        <p>contribution : <%=totaux.totpers%>€</p>
+    </div>
+    <span id="budgestRole" hidden>parent</span>
+    <% } %>
 
-<button type="button" id="depenseBtn">
-    -
-    <span>nouvelle dépense</span>    
-</button>
+    <% if (data.role[0].role === 1) { %>
+    <div class="totalChild">
+        <p>raté</p>
+    </div>
+    <span id="budgestRole" hidden>enfant</span>
+    <% } %>
+</h2>
 
-<button type="button" id="depenseBtn">
-    €
-    <span>mes budgets</span>    
-</button>
+<h3>bienvenue sur votre interface de gestion</h3>
+
+<div id="newbtnContainer">
+    <a href="/profil/<%=user%>/new?type=dep"> nouvelle dépense </a>
+    <% if (data.role[0].role === 0) { %>
+    <a href="/profil/<%=user%>/new?type=rent"> nouvelle entrée d'argent </a>
+    <a href="/profil/<%=user%>/new?type=vir"> nouveau virement </a>
+    <% } %>
+</div>
+
+<table>
+    <tr>
+        <th>Transaction</th>
+        <th>Montant</th>
+        <th>Date</th>
+        <th>Origine</th>
+    </tr>
+    <% data.forEach(function(d) { %>
+    <% if (d.id_dep) { %>
+        <tr dep_id="<%=d.id_dep%>">
+    <% } %>
+    <% if (d.id_rent) { %>
+        <tr rent_id="<%=d.id_rent%>">
+    <% } %>
+    <% if (d.id_vir) { %>
+        <tr vir_id="<%=d.id_vir%>">
+    <% } %>
+            <td><div class="suprBtn" title="supprimer cette transaction">X</div><%=d.intitule%></td>
+            <td>
+                <% if (d.id_dep) { %>
+                    <span style="color:#ce2b37; font-weight:bold" class="spent">-<%=d.montant%></span>
+                <% } %>
+                <% if (d.id_rent) { %>
+                    <span style="color:#009246; font-weight:bold">+<%=d.montant%></span>
+                <% } %>
+                <% if (d.id_vir && data.role[0].role === 0) { %>
+                    <span style="color:#D4591B; font-weight:bold">-<%=d.montant%></span>
+                <% } %>
+                <% if (d.id_vir && data.role[0].role === 1) { %>
+                    <span style="color:#009246; font-weight:bold" class="earned">+<%=d.montant%></span>
+                <% } %>
+            </td>
+            <%  let date = d.common_date
+                let jour = date.getDate()
+                if (jour<10) {jour = "0"+jour}
+                let mois = date.getMonth()+1
+                if (mois<10) {mois = "0"+mois}
+                let annee = date.getFullYear()
+            %>
+            <td><%=jour%>/<%=mois%>/<%=annee%></td>
+            <td><%=d.origpost%></td>
+            
+        </tr>
+    <% }) %>
+</table>
+<div id="filler"></div>
+
+<script src="/js/profil.js"></script>
