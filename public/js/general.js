@@ -76,3 +76,12 @@ function post_x(path, params, method) {
     document.body.appendChild(form);
     form.submit();
 }
+
+let toggleForm = function(id) {
+    let form = document.getElementById(id)
+    if (form.style.display === "none") {
+        form.style.display = "flex"
+    } else if (form.style.display === "flex") {
+        form.style.display = "none"
+    }
+}

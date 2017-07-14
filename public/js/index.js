@@ -1,7 +1,6 @@
 let subForm = document.getElementById("subForm")
 let loginBtn = document.querySelectorAll('.logBlock')
 let subBtn = document.querySelector('.subBlock')
-let logForm = document.querySelector("#logForm form")
 let errCont = document.getElementById("errContainer")
 
 subForm.style.display = "none"
@@ -62,7 +61,6 @@ subForm.addEventListener('submit', function(e) {
         //     body: JSON.stringify(data)
         // })
 
-
-subBtn.addEventListener('click', (e) => {
-    subForm.style.display= "flex"
-})
+// subBtn.addEventListener('click', (e) => {
+//     subForm.style.display= "flex"
+// })

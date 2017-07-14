@@ -61,6 +61,14 @@ app.get('/profil/:user/new', function(req, res) {
     }
 })
 
+// page de configuration du profil
+app.get('/profil/:user/config', function(req, res) {
+    let user = req.params.user
+    bdd.userQuery(function(result) {
+        res.render('config.ejs', {user: user, result: result})
+    }, user)
+})
+
 // enregistrer une dépense
 app.post('/profil/:user/newdep', function (req, res) {
     let msg = req.body
@@ -122,7 +130,6 @@ app.post('/profil/:user/newvir', function (req, res) {
 // effacer des lignes du tableau
 app.post('/profil/:user/del', function (req, res) {
     let login = req.params.user
-    console.log(login)
     let msg = req.body
     let table = msg.table,
         idtype = msg.type,
@@ -135,6 +142,16 @@ app.post('/profil/:user/del', function (req, res) {
         })
     })
 })
+
+app.post('/:user/modavatar', function (req, res) {
+    let login = req.params.user
+    let color = parseInt(req.body.couleur)
+    console.log(req.body)
+    console.log(color)
+    bdd.changeUser('avatar', color, login)
+    res.redirect('/')
+})
+
 
 
 // gerer les erreurs

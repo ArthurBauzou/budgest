@@ -1,10 +1,4 @@
-<link href="https://fonts.googleapis.com/css?family=Alegreya:700i" rel="stylesheet"> 
-<link rel="stylesheet" href="/styles/style01.css">
-<link rel="stylesheet" href="/styles/table.css">
-<script src="/js/general.js"></script>
-
-
-<h1><a href="/" title="home">Budgest</a></h1>
+<% include header.ejs %>
 
 <h2>
     <%= user %>
@@ -32,6 +26,8 @@
     <a href="/profil/<%=user%>/new?type=rent"> nouvelle entrée d'argent </a>
     <a href="/profil/<%=user%>/new?type=vir"> nouveau virement </a>
     <% } %>
+    <div class="filler-line"></div>
+    <a href="/profil/<%=user%>/config" title="Configurer le profil" class="ion-android-settings" id="configBtn"></a>
 </div>
 
 <table>

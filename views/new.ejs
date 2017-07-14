@@ -1,78 +1,76 @@
-<link href="https://fonts.googleapis.com/css?family=Alegreya:700i" rel="stylesheet"> 
-<link rel="stylesheet" href="/styles/style01.css">
-<link rel="stylesheet" href="/styles/table.css">
-<script src="/js/general.js"></script>
+<% include header.ejs %>
 
-<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
-<h1><a href="/" title="home">Budgest</a></h1>
 <h2> <%= user %> </h2>
 
-<% if (type==="dep") { %>
-<form id="newForm" action="/profil/<%=user%>/newdep" method="post">
-    <h3>Nouvelle dépense</h3>
-<% } %>
-<% if (type==="rent") { %>
-<form id="newForm" action="/profil/<%=user%>/newrent" method="post">
-    <h3>Nouvelle entrée de fonds</h3>
-<% } %>
-<% if (type==="vir") { %>
-<form id="newForm" action="/profil/<%=user%>/newvir" method="post">
-    <h3>Nouveau virement</h3>
-<% } %>
 
-    <div id="errContainer" class="error"></div>
+    <% if (type==="dep") { %>
+        <h3>Nouvelle dépense</h3>
+        <div class="formContainer">
+        <form id="newForm" action="/profil/<%=user%>/newdep" method="post" class="budForm">
+    <% } %>
+    <% if (type==="rent") { %>
+        <h3>Nouvelle entrée de fonds</h3>
+        <div class="formContainer">
+        <form id="newForm" action="/profil/<%=user%>/newrent" method="post" class="budForm">
+    <% } %>
+    <% if (type==="vir") { %>
+        <h3>Nouveau virement</h3>
+        <div class="formContainer">
+        <form id="newForm" action="/profil/<%=user%>/newvir" method="post" class="budForm">
+    <% } %>
 
-    <label for="descr">
-        <span>description</span>
-        <input id="descr" name="descr" type="text">
-    </label>
+        <div id="errContainer" class="error"></div>
 
-    <label for="montant">
-        <span>montant</span>
-        <input id="montant" name="montant" type="text">
-    </label>
+        <label for="descr">
+            <span>description</span>
+            <input id="descr" name="descr" type="text">
+        </label>
 
-    <label for="date">
-        <span>date</span>
-        <input id="datepicker" name="date" type="text">
-    </label>
+        <label for="montant">
+            <span>montant</span>
+            <input id="montant" name="montant" type="text">
+        </label>
 
-    <label for="postorigin">
-        <% if (type==="dep"){ %> <span>Poste de dépense</span> <%}%>
-        <% if (type==="rent"){ %> <span>Origine des revenus</span> <%}%>
-        <% if (type==="vir"){ %> <span>Bénéficiaire</span> <%}%>
+        <label for="date">
+            <span>date</span>
+            <input id="datepicker" name="date" type="text">
+        </label>
 
-        <select id="postorigin" name="posto">
+        <label for="postorigin" class="formFinal">
+            <% if (type==="dep"){ %> <span>Poste de dépense</span> <%}%>
+            <% if (type==="rent"){ %> <span>Origine des revenus</span> <%}%>
+            <% if (type==="vir"){ %> <span>Bénéficiaire</span> <%}%>
 
-            <% postoList.forEach(function(data) { %>
-                <% if (data.id_post && type==="dep") { %>
-                    <option value="<%=data.id_post%>"> <%=data.nom%> </option>
-                <% } %>
-                <% if (data.id_orig && type==="rent") { %>
-                    <option value="<%=data.id_orig%>"> <%=data.nom%> </option>
-                <% } %>
-            <% }) %>
+            <select id="postorigin" name="posto">
 
-            <% users.forEach(function(data) { %>
-                <option value="<%=data.nom%>"> <%=data.nom%> </option>
-            <% }) %>
+                <% postoList.forEach(function(data) { %>
+                    <% if (data.id_post && type==="dep") { %>
+                        <option value="<%=data.id_post%>"> <%=data.nom%> </option>
+                    <% } %>
+                    <% if (data.id_orig && type==="rent") { %>
+                        <option value="<%=data.id_orig%>"> <%=data.nom%> </option>
+                    <% } %>
+                <% }) %>
 
-            <% if (type==="dep" || type==="rent") { %>
-                <option value="n_posto">Nouveau</option>
-            <%}%>
+                <% users.forEach(function(data) { %>
+                    <option value="<%=data.nom%>"> <%=data.nom%> </option>
+                <% }) %>
 
-        </select>
-    </label>
+                <% if (type==="dep" || type==="rent") { %>
+                    <option value="n_posto">Nouveau</option>
+                <%}%>
 
-    <label id="newposto" for="n_posto">
-        <span>Nouveau :</span>
-        <input id="n_posto" name="n_posto" type="text">
-    </label>
+            </select>
+        </label>
 
-    <input type="submit" value="Envoyer">
-</form>
+        <label id="newposto" for="n_posto" class="formFinal">
+            <span>Nouveau :</span>
+            <input id="n_posto" name="n_posto" type="text">
+        </label>
+
+        <input type="submit" value="Envoyer" class="formBtn">
+    </form>
+</div>
 
 <script src="/js/new.js" defer></script>

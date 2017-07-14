@@ -1,9 +1,5 @@
-<link rel="stylesheet" href="/styles/style01.css">
-<link href="https://fonts.googleapis.com/css?family=Alegreya:700i" rel="stylesheet"> 
-<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-<script src="/js/general.js"></script>
+<% include header.ejs %>
 
-<h1><a href="/" title="home">Budgest</a></h1>
 
 <div id="userContainer">
     <% for (let i=0; i<userlist.length; i++) { %>
@@ -16,18 +12,16 @@
     <% }} %>
 </div>
 
-<div id="newContainer">
-    <div class="subBlock">
-        nouvel utilisateur
-    </div>
-    <form id="subForm" action="/subscribe" method="post">
+<div class="formContainer">
+    <input type="button" value="Nouvel utilisateur" class="formBtn" onclick="toggleForm('subForm')">
+    <form class="budForm" id="subForm" action="/subscribe" method="post" style="display: none">
         <div id="errContainer" class="error"></div>
 
         <input type="text" name="name" id="name" placeholder="nom">
         <input type="password" name="pass" id="pass" placeholder="password">
         <input type="password" name="pass2" id="pass2" placeholder="confirmer password">
-        <span class="childCheck">Ce compte est-il pour un enfant ?<input type="checkbox" name="role"></span>
-        <input type="submit" class="subregist" value="+">
+        <span class="childCheck formFinal">Ce compte est-il pour un enfant ?<input type="checkbox" name="role"></span>
+        <input type="submit" class="subregist formBtn" value="inscription">
     </form>
 </div>
 <div id="filler"></div>

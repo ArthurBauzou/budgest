@@ -18,11 +18,18 @@ let connection = bdd.createConnection({
     }
 
 // récupère une liste des utilisateurs inscrits :
-    exports.userQuery = function(fn) {
-        connection.query('select nom, role, avatar from personnes;', function(err, result, fields) {
-            if (err) throw err
-            fn(result)
-        })
+    exports.userQuery = function(fn, user) {
+        if (user) {
+            connection.query('select nom, role, avatar from personnes where nom = ?;', [user], function(err, result, fields) {
+                if (err) throw err
+                fn(result)
+            })
+        } else {
+            connection.query('select nom, role, avatar from personnes;', function(err, result, fields) {
+                if (err) throw err
+                fn(result)
+            })
+        }
     }
     exports.enfantsQuery = function(fn) {
         connection.query('select nom from personnes where role = 1;', function(err, result, fields) {
@@ -155,15 +162,11 @@ exports.userTransaction = function(user, fn) {
             if (result_rent[0]) {total = result_rent[0].total}
             if (result_rent[1]) {totalperso = result_rent[1].total}
             
-
-            console.log("1", total, totalperso)
             connection.query(q_dep, [user], function(err, result_dep, fields) {
                 if (err) throw err
                 if (result_dep[0]) {total = Math.round((total - result_dep[0].total)*100)/100}
                 if (result_dep[1]) {totalperso = Math.round((totalperso - result_dep[1].total)*100)/100}
 
-                console.log(result_dep)
-                console.log("2", total, totalperso)
                 connection.query(q_vir, [user], function(err, result_vir, fields) {
                     if (err) throw err
                     if (result_vir[0]) {total =  Math.round((total - result_vir[0].total)*100)/100}
@@ -175,8 +178,16 @@ exports.userTransaction = function(user, fn) {
         })
     }
 
-exports.delete_x = function(table, idtype, id) {
-    connection.query('delete from '+table+' where '+idtype+' = '+id, function(err, result, fields) {
+    exports.changeUser = function(col, data, id) {
+        connection.query('update personnes set '+col+' = ? where nom = ?', [data, id], function(err, result, fields) {
             if (err) throw err
         })
     }
+
+
+// suppression d'une ligne dans une table
+    exports.delete_x = function(table, idtype, id) {
+        connection.query('delete from '+table+' where '+idtype+' = '+id, function(err, result, fields) {
+                if (err) throw err
+            })
+        }

@@ -1,6 +1,14 @@
+@keyframes fade {
+    from {background-color: #E1D3C1;}
+    to {background-color: #CABDAD;}
+}
+@keyframes fade2 {
+    from {background-color: #B49C7E;}
+    to {background-color: #8c775d;}
+}
+
 /* forme générale du site */
     body {
-
         width: 778px;
         margin: 0 auto;
         background: #FCF5EB;
@@ -35,6 +43,7 @@
     h3 {
         font-size: 24px;
         text-align: center;
+        margin-bottom: 48px;
     }
     /* compreurs de totaux de la page de profil */
     h2 .total p, h2 .totalChild p {
@@ -94,34 +103,25 @@
     }
 
 /* formulaires */
-    #newContainer {
+    .formContainer {
         box-sizing: border-box;
         border: 1px solid #E1D3C1;
         border-radius: 3px;
         width: 80%;
         margin: 0 auto;
-    }
-    .subBlock {
-        text-align: center;
-        background: #E1D3C1;
-        padding: 8px;
-        font-size: 16px;
-    }
-    .subBlock:hover {
-        background: #CABDAD;
-        cursor: pointer;
-    }
-    #logForm, #newForm {
-        width: 70%;
+        padding: 5px;
+        margin-bottom: 32px;
+    } 
+    .budForm {
         margin: 0 auto;
-    }
-    form#subForm {
         padding: 8px;
+        padding-top: 0px;
         margin: 16px;
         flex-flow: column nowrap;
     }
     /* apparence générale des labels, input et select  */
-    label {
+    label, .suprDiv {
+        font-size: 20px;
         display: flex;
         flex-flow: row nowrap;
         justify-content: space-between;
@@ -144,11 +144,12 @@
         border-radius: 3px;
         border: 1px solid #B49C7E;
     }
+
     /* case à cocher */
     .childCheck {
         margin-bottom: 4px;
         margin-top: 4px;
-        font-size: 20px;
+        /* font-size: 20px; */
         padding: 4px;
         text-align: center;
     }
@@ -157,14 +158,27 @@
         margin-left: 24px;
     }
     /* boutons */
-    input[type="submit"]{
-        margin-top: 16px;
-        background: #B49C7E;
-        border: none;
+    .formBtn {
+        text-align: center;
+        background: #E1D3C1;
+        padding: 8px;
+        font-size: 16px;
+        margin: 0;
     }
-    input[type="submit"]:hover {
-        background: #8c775d;
+    .formBtn:hover {
+        background: #CABDAD;
+        cursor: pointer;
     }
+    .formBtn:focus, input[type="submit"]:focus {
+        outline: none;
+    }
+    .demiBtn {
+        flex-basis: 40%;
+    }
+    .formFinal {
+        margin-bottom: 24px;
+    }
+
     /* erreurs d'inputs */
     .error {
         background: #D7ACA7;
@@ -180,13 +194,12 @@
 
 /* boutons de la page de profil */
     #newbtnContainer {
-        width: 70%;
         display: flex;
         flex-flow: row nowrap;
         justify-content: space-between;
     }
     #newbtnContainer a {
-        margin-top: 16px;
+        margin-right: 16px;
         background: #E1D3C1;
         border-radius: 3px;
         color: black;
@@ -195,9 +208,23 @@
     }
     #newbtnContainer a:hover {
         background: #CABDAD;
+        animation-name: fade;
+        animation-duration: 0.3s;
+    }
+    .filler-line {
+        flex: 1;
+        width: 50%;
+    }
+    #newbtnContainer #configBtn {
+        margin-right: 0px;
+        font-size: 1.6rem;
     }
 
 /* petit remplissage de fin de page pour le confort visuel  */
     #filler {
         height: 150px;
     }
+    .fatIcon {
+        font-size: 32px;
+    }
+

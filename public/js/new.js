@@ -16,8 +16,10 @@ errCont.style.display = 'none'
 select.addEventListener('change', function() {
     if (select.value === "n_posto") {
         newPosto.style.display = "flex"
+        select.parentNode.className = ""
     } else {
-        newPosto.style.display = "none"        
+        newPosto.style.display = "none"
+        select.parentNode.className = "formFinal"
     }
 })
 

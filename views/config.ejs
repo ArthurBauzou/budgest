@@ -1,0 +1,94 @@
+<% include header.ejs %>
+
+<h2><%=user%></h2>
+
+<h3>Sur cette page vous pouvez configurer votre profil</h3>
+
+
+<span id="infovatar" hidden><%=result[0].avatar%></span>
+
+
+<%# Changer de nom %>
+<div class="formContainer">
+    <input type="button" value="Changer votre nom" class="formBtn" onclick="toggleForm('nameform')">
+    <form id="nameform" action="\<%=user%>/modName" method="post" style="display: none" class="budForm">
+        <div id="nameerror" class="error"></div>
+
+        <label for="newname">
+            <span>Nouveau nom : </span>
+            <input type="text" name="newname" id="newname">
+        </label>
+        <label for="passname" class="formFinal">
+            <span>Mot de passe : </span>
+            <input type="password" name="passname" id="passname">
+        </label>
+
+        <input type="submit" value="confirmer" class="formBtn">
+    </form>
+</div>
+
+<%# Changer de mot de passe %>
+<div class="formContainer">
+    <input type="button" value="Changer votre mot de passe" class="formBtn" onclick="toggleForm('passform')">
+    <form id="passform" action="\<%=user%>/modpass" method="post" style="display: none" class="budForm">
+        <div id="passerror" class="error"></div>
+
+        <label for="oldpass">
+            <span>Ancien : </span>
+            <input type="password" name="oldpass" id="oldpass">
+        </label>
+        <label for="newpass">
+            <span>Nouveau : </span>
+            <input type="password" name="newpass" id="newpass">
+        </label>
+        <label for="newpassconf" class="formFinal">
+            <span>Confirmer : </span>
+            <input type="password" name="newpassconf" id="newpassconf">
+        </label>
+
+        <input type="submit" value="confirmer" class="formBtn">
+    </form>
+</div>
+
+<%# Changer de avatar %>
+<div class="formContainer">
+    <input type="button" value="Changer votre avatar" class="formBtn" onclick="toggleForm('avatarform')">
+    <form id="avatarform" action="\<%=user%>/modavatar" method="post" style="display: none" class="budForm">
+        <label for="couleur">
+            <span>Couleur : </span>
+            <select name="couleur" id="couleur" class="formFinal" onchange="this.style.color=this.options[this.selectedIndex].style.color">
+                <option value="1" style="color: #154d71"> █████ </option>
+                <option value="2" style="color: #0071a2"> █████ </option>
+                <option value="3" style="color: #00bcb9"> █████ </option>
+                <option value="4" style="color: #fcb826"> █████ </option>
+                <option value="5" style="color: #f1872a"> █████ </option>
+            </select>
+        </label>
+
+        <input type="submit" value="confirmer" class="formBtn">
+    </form>
+</div>
+
+<%# Supprimer le compte %>
+<div class="formContainer">
+    <input type="button" value="supprimer ce compte" class="formBtn" style="margin-bottom: 0px" onclick="toggleForm('suprAccForm')">
+    <form id="suprAccForm" action="\<%=user%>/suprAcc" method="post" style="display: none" class="budForm">
+        <div class="suprDiv childCheck">
+            <div class="ion-alert-circled fatIcon"></div>
+            Attention, cela supprimera aussi toutes les transactions associées !
+        </div>
+        <label for="passname" class="formFinal">
+            <span>Mot de passe : </span>
+            <input type="password" name="passname" id="passname">
+        </label>
+        <div class="suprDiv">
+            <input type="password" value="<%=user%>" hidden>
+            <input type="button" value="annuler" class="demiBtn formBtn" onclick="toggleForm('suprAccForm')">
+            <input type="submit" value="confirmer" class="demiBtn formBtn">
+        </div>
+    </form>
+</div>
+
+<div id="filler"></div>
+
+<script src="/js/config.js"></script>

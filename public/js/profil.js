@@ -1,5 +1,4 @@
 let username = document.getElementsByTagName('h2')[0].firstChild.textContent.replace(/\s/g,'')
-console.log(username)
 let role = document.getElementById('budgestRole').textContent
 
 if (role === "enfant") {
@@ -16,18 +15,20 @@ let suprBtnList = document.querySelectorAll(".suprBtn")
 
 for (let i=0; i<suprBtnList.length; i++) {
     suprBtnList[i].addEventListener('click', function(e) {
-        let ligne = e.target.parentNode.parentNode
-        let msg = {}
-        if (ligne.hasAttribute("dep_id")) {
-            msg = {"table": "depenses", "type": "id_dep","id": ligne.getAttribute("dep_id")}
+        if (confirm('Attention : En cliquant sur "OK", vous supprimerez définitivement cette transaction. Continuer ?')) {
+            let ligne = e.target.parentNode.parentNode
+            let msg = {}
+            if (ligne.hasAttribute("dep_id")) {
+                msg = {"table": "depenses", "type": "id_dep","id": ligne.getAttribute("dep_id")}
+            }
+            if (ligne.hasAttribute("rent_id")) {
+                msg = {"table": "rentrees", "type": "id_rent","id": ligne.getAttribute("rent_id")}
+            }
+            if (ligne.hasAttribute("vir_id")) {
+                msg = {"table": "virements", "type": "id_vir", "id": ligne.getAttribute("vir_id")}
+            }
+            post_x('/profil/'+username+'/del', msg)
         }
-        if (ligne.hasAttribute("rent_id")) {
-            msg = {"table": "rentrees", "type": "id_rent","id": ligne.getAttribute("rent_id")}
-        }
-        if (ligne.hasAttribute("vir_id")) {
-            msg = {"table": "virements", "type": "id_vir", "id": ligne.getAttribute("vir_id")}
-        }
-        post_x('/profil/'+username+'/del', msg)
     })
 }
 
