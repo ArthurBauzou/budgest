@@ -65,7 +65,7 @@ app.get('/profil/:user/new', function(req, res) {
 app.get('/profil/:user/config', function(req, res) {
     let user = req.params.user
     bdd.userQuery(function(result) {
-        res.render('config.ejs', {user: user, result: result})
+        res.render('config.ejs', {user: user, result: result, err: 'no'})
     }, user)
 })
 
@@ -135,10 +135,11 @@ app.post('/profil/:user/del', function (req, res) {
         idtype = msg.type,
         id = msg.id
 
-    bdd.delete_x(table, idtype, id)
-    bdd.userTransaction(login, function(lignes) {
-        bdd.total(login, function(totaux) {
-            res.render('profil.ejs', {user: login, data: lignes, totaux: totaux})
+    bdd.delete_x(table, idtype, id, function(resdel) {
+        bdd.userTransaction(login, function(lignes) {
+            bdd.total(login, function(totaux) {
+                res.render('profil.ejs', {user: login, data: lignes, totaux: totaux})
+            })
         })
     })
 })
@@ -146,10 +147,58 @@ app.post('/profil/:user/del', function (req, res) {
 app.post('/:user/modavatar', function (req, res) {
     let login = req.params.user
     let color = parseInt(req.body.couleur)
-    console.log(req.body)
-    console.log(color)
     bdd.changeUser('avatar', color, login)
     res.redirect('/')
+})
+
+app.post('/:user/suprAcc', function(req, res) {
+    let login = req.params.user
+    let password = req.body.pass
+    bdd.passCheck(login, function(pass) {
+        if (password === pass[0].pass) {
+            bdd.delete_x('depenses', 'personne', login, (resdep) => {
+                bdd.delete_x('rentrees', 'personne', login, (resrent) => {
+                    bdd.getVir(login, function(virements) {
+                        bdd.userQuery((data) => {
+                            let role = parseInt(data[0].role)
+                            if (role === 0) {
+                                bdd.addOrig('virement '+login, function(id) {
+                                    virements.forEach(function(vir) { 
+                                        let jour = vir.date_vir.getDate()
+                                        if (jour<10) {jour = "0"+jour}
+                                        let mois = vir.date_vir.getMonth()+1
+                                        if (mois<10) {mois = "0"+mois}
+                                        let annee = vir.date_vir.getFullYear()
+                                        bdd.addRentree(vir.nom, parseInt(vir.montant).toFixed(2) , annee+'-'+mois+'-'+jour, parseInt(id), vir.beneficiaire)
+                                    })
+                                })
+                            } else if (role === 1) {
+                                bdd.addPost('virement '+login, function(id) {
+                                    virements.forEach(function(vir) {
+                                        let jour = vir.date_vir.getDate()
+                                        if (jour<10) {jour = "0"+jour}
+                                        let mois = vir.date_vir.getMonth()+1
+                                        if (mois<10) {mois = "0"+mois}
+                                        let annee = vir.date_vir.getFullYear()
+                                        bdd.addDepense(vir.nom, parseInt(vir.montant).toFixed(2), annee+'-'+mois+'-'+jour, parseInt(id), vir.personne)
+                                    })
+                                })
+                            }
+                            bdd.delete_x('virements', 'personne', login, (resvir) => {
+                                bdd.delete_x('personnes', 'nom', login, ()=>{
+                                    res.redirect('/')
+                                })
+                            })
+                        }, login)
+                    })
+                })
+            })
+        } else {
+            bdd.userQuery(function(result) {
+                res.render('config.ejs', {user: login, result: result, err: 'supr'})
+            }, login)
+        }
+    })
 })
 
 

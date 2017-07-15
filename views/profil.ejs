@@ -53,7 +53,7 @@
                     <span style="color:#ce2b37; font-weight:bold" class="spent">-<%=d.montant%></span>
                 <% } %>
                 <% if (d.id_rent) { %>
-                    <span style="color:#009246; font-weight:bold">+<%=d.montant%></span>
+                    <span style="color:#009246; font-weight:bold" class="earned">+<%=d.montant%></span>
                 <% } %>
                 <% if (d.id_vir && data.role[0].role === 0) { %>
                     <span style="color:#D4591B; font-weight:bold">-<%=d.montant%></span>

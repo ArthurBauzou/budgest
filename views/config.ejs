@@ -8,30 +8,12 @@
 <span id="infovatar" hidden><%=result[0].avatar%></span>
 
 
-<%# Changer de nom %>
-<div class="formContainer">
-    <input type="button" value="Changer votre nom" class="formBtn" onclick="toggleForm('nameform')">
-    <form id="nameform" action="\<%=user%>/modName" method="post" style="display: none" class="budForm">
-        <div id="nameerror" class="error"></div>
-
-        <label for="newname">
-            <span>Nouveau nom : </span>
-            <input type="text" name="newname" id="newname">
-        </label>
-        <label for="passname" class="formFinal">
-            <span>Mot de passe : </span>
-            <input type="password" name="passname" id="passname">
-        </label>
-
-        <input type="submit" value="confirmer" class="formBtn">
-    </form>
-</div>
-
 <%# Changer de mot de passe %>
 <div class="formContainer">
     <input type="button" value="Changer votre mot de passe" class="formBtn" onclick="toggleForm('passform')">
     <form id="passform" action="\<%=user%>/modpass" method="post" style="display: none" class="budForm">
-        <div id="passerror" class="error"></div>
+    
+        <div id="passerror" class="error" style="display: none"></div>
 
         <label for="oldpass">
             <span>Ancien : </span>
@@ -77,9 +59,12 @@
             <div class="ion-alert-circled fatIcon"></div>
             Attention, cela supprimera aussi toutes les transactions associées !
         </div>
+
+        <div id="suprerror" class="error" style="display: none"></div>
+
         <label for="passname" class="formFinal">
             <span>Mot de passe : </span>
-            <input type="password" name="passname" id="passname">
+            <input type="password" name="pass">
         </label>
         <div class="suprDiv">
             <input type="password" value="<%=user%>" hidden>

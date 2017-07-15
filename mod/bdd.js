@@ -184,10 +184,17 @@ exports.userTransaction = function(user, fn) {
         })
     }
 
+    exports.getVir = function(user, fn) {
+        connection.query('select nom, montant, date_vir, beneficiaire, personne from virements where personne = ?', [user], function(err, result, fields) {
+            if (err) throw err
+            fn(result)
+        })
+    }
 
 // suppression d'une ligne dans une table
-    exports.delete_x = function(table, idtype, id) {
-        connection.query('delete from '+table+' where '+idtype+' = '+id, function(err, result, fields) {
+    exports.delete_x = function(table, col, id, fn) {
+        connection.query('delete from '+table+' where '+col+' = ?',[id], function(err, result, fields) {
                 if (err) throw err
+                fn(result)
             })
         }
