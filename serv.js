@@ -151,6 +151,61 @@ app.post('/:user/modavatar', function (req, res) {
     res.redirect('/')
 })
 
+app.post('/:user/modpass', function (req, res) {
+    let login = req.params.user
+    let password = req.body.oldpass
+    let newpass = req.body.newpass
+    bdd.passCheck(login, function(pass) {
+        if (password === pass[0].pass) {
+            bdd.changeUser('pass', newpass, login)
+            res.redirect('/')
+        } else {
+            bdd.userQuery(function(result) {
+                res.render('config.ejs', {user: login, result: result, err: 'pass'})
+            }, login)
+        }
+    })
+})
+
+let formatDate = function(date) {
+    let jour = date.getDate()
+    if (jour<10) {jour = "0"+jour}
+    let mois = date.getMonth()+1
+    if (mois<10) {mois = "0"+mois}
+    let annee = date.getFullYear()
+    let newDateFormat = annee+'-'+mois+'-'+jour
+    return newDateFormat
+}
+
+// cette fonction va rajouter des lignes dans les dépenses (si on supprime un enfant) ou dans les rentrées (si on supprime un adulte) avant de supprimer les virements
+let ajoutSiSupr = function(login, role, fn) {
+    if (role === 0) {
+        bdd.getVir('parent', login, function(virements) {
+            bdd.addOrig('virement de '+login, function(id) {
+                virements.forEach(function(vir) { 
+                    bdd.addRentree(vir.nom, parseInt(vir.montant).toFixed(2) , formatDate(vir.date_vir), parseInt(id), vir.beneficiaire)
+                })
+                bdd.delete_x('virements', 'personne', login, (resdel)=>{
+                    fn()
+                })
+            })
+        })
+    }
+    if (role === 1) {
+        bdd.getVir('enfant', login, function(virements) {
+            bdd.addPost('virement à '+login, function(id) {
+                virements.forEach(function(vir) {
+                    bdd.addDepense(vir.nom, parseInt(vir.montant).toFixed(2), formatDate(vir.date_vir), parseInt(id), vir.personne)
+                })
+                bdd.delete_x('virements', 'beneficiaire', login, (resdel)=>{
+                    fn()
+                })
+            })
+        })
+    }
+}
+
+// suppresion d'un compte
 app.post('/:user/suprAcc', function(req, res) {
     let login = req.params.user
     let password = req.body.pass
@@ -158,39 +213,15 @@ app.post('/:user/suprAcc', function(req, res) {
         if (password === pass[0].pass) {
             bdd.delete_x('depenses', 'personne', login, (resdep) => {
                 bdd.delete_x('rentrees', 'personne', login, (resrent) => {
-                    bdd.getVir(login, function(virements) {
-                        bdd.userQuery((data) => {
-                            let role = parseInt(data[0].role)
-                            if (role === 0) {
-                                bdd.addOrig('virement '+login, function(id) {
-                                    virements.forEach(function(vir) { 
-                                        let jour = vir.date_vir.getDate()
-                                        if (jour<10) {jour = "0"+jour}
-                                        let mois = vir.date_vir.getMonth()+1
-                                        if (mois<10) {mois = "0"+mois}
-                                        let annee = vir.date_vir.getFullYear()
-                                        bdd.addRentree(vir.nom, parseInt(vir.montant).toFixed(2) , annee+'-'+mois+'-'+jour, parseInt(id), vir.beneficiaire)
-                                    })
-                                })
-                            } else if (role === 1) {
-                                bdd.addPost('virement '+login, function(id) {
-                                    virements.forEach(function(vir) {
-                                        let jour = vir.date_vir.getDate()
-                                        if (jour<10) {jour = "0"+jour}
-                                        let mois = vir.date_vir.getMonth()+1
-                                        if (mois<10) {mois = "0"+mois}
-                                        let annee = vir.date_vir.getFullYear()
-                                        bdd.addDepense(vir.nom, parseInt(vir.montant).toFixed(2), annee+'-'+mois+'-'+jour, parseInt(id), vir.personne)
-                                    })
-                                })
-                            }
-                            bdd.delete_x('virements', 'personne', login, (resvir) => {
-                                bdd.delete_x('personnes', 'nom', login, ()=>{
-                                    res.redirect('/')
-                                })
+                    bdd.userQuery((data) => {
+                        let role = parseInt(data[0].role)
+                        ajoutSiSupr(login, role, ()=> {
+                            console.log('serieux')
+                            bdd.delete_x('personnes', 'nom', login, ()=> {
+                                res.redirect('/')
                             })
-                        }, login)
-                    })
+                        })
+                    }, login)
                 })
             })
         } else {
@@ -201,7 +232,11 @@ app.post('/:user/suprAcc', function(req, res) {
     })
 })
 
-
+// app.post('/cleanPosto', function(req, res) {
+//     bdd.post_origin((postolist)=>{
+//         console.log(postolist)
+//     })
+// })
 
 // gerer les erreurs
 app.use(function (err, req, res, next) {

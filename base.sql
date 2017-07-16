@@ -79,4 +79,4 @@ insert into rentrees (nom, montant, date_rent, origine_id, personne) values
 ('salaire juin', 1342.18, '2017-07-01', 3, 'Juliette');
 
 insert into virements (nom, montant, date_vir, beneficiaire, personne) values
-('argent pour anniv pote', 50, '2017-04-26', 'Marmaduke', 'Arthur');
+('argent pour anniv pote marmaduke', 50, '2017-04-26', 'Marmaduke', 'Arthur');

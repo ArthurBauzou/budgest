@@ -26,8 +26,16 @@
         font-family: 'Alegreya', serif;
     }
     h1 a {
+        border-left: 5px solid #B49C7E;
+        border-right: 5px solid #B49C7E;
+        padding: 0px 16px; 
         color:black;
         text-decoration: none;
+    }
+    h1 a:hover {
+        border-left: 5px solid #CABDAD;
+        border-right: 5px solid #CABDAD;
+        border-radius: 8px;
     }
     h2 {
         display: flex;

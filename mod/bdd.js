@@ -146,7 +146,9 @@ exports.userTransaction = function(user, fn) {
         "union all "+
         "select sum(montant) as total from depenses where personne = ?;"
         let q_rent =
-        "select sum(montant) as total from rentrees "+
+        "select sum(rent.montant) as total from rentrees rent "+
+        "join personnes pers on pers.nom = rent.personne "+
+        "where pers.role = 0 "+
         "union all "+
         "select sum(montant) as total from rentrees where personne = ?;"
         let q_vir =
@@ -184,17 +186,32 @@ exports.userTransaction = function(user, fn) {
         })
     }
 
-    exports.getVir = function(user, fn) {
-        connection.query('select nom, montant, date_vir, beneficiaire, personne from virements where personne = ?', [user], function(err, result, fields) {
-            if (err) throw err
-            fn(result)
-        })
+    exports.getVir = function(method, user, fn) {
+        if (method === 'parent') {
+            connection.query('select nom, montant, date_vir, beneficiaire, personne from virements where personne = ?', [user], function(err, result, fields) {
+                if (err) throw err
+                fn(result)
+            })
+        }
+        if (method === 'enfant') {
+            connection.query('select nom, montant, date_vir, beneficiaire, personne from virements where beneficiaire = ?', [user], function(err, result, fields) {
+                if (err) throw err
+                fn(result)
+            })
+        }
     }
 
 // suppression d'une ligne dans une table
     exports.delete_x = function(table, col, id, fn) {
         connection.query('delete from '+table+' where '+col+' = ?',[id], function(err, result, fields) {
-                if (err) throw err
-                fn(result)
-            })
-        }
+            if (err) throw err
+            fn(result)
+        })
+    }
+
+    // exports.postLinks = function(id) {
+    //     connection.query('select * from depenses where poste_id = '+id+';', function(err, result, fields) {
+    //         if (err) throw err
+    //         fn(result.length)
+    //     })
+    // }

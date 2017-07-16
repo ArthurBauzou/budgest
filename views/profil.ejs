@@ -22,8 +22,8 @@
 
 <div id="newbtnContainer">
     <a href="/profil/<%=user%>/new?type=dep"> nouvelle dépense </a>
-    <% if (data.role[0].role === 0) { %>
     <a href="/profil/<%=user%>/new?type=rent"> nouvelle entrée d'argent </a>
+    <% if (data.role[0].role === 0) { %>
     <a href="/profil/<%=user%>/new?type=vir"> nouveau virement </a>
     <% } %>
     <div class="filler-line"></div>
